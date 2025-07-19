@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>I Am Sorry, I Love You</title>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>I Am Sorry & I Love You</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"/>
   <style>
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      margin: 0; padding: 0; box-sizing: border-box;
     }
-
     body {
       background: linear-gradient(to bottom right, #ffe1e1, #ffe5f9);
       height: 100vh;
@@ -22,29 +18,42 @@
       flex-direction: column;
       overflow: hidden;
       font-family: 'Pacifico', cursive;
+      position: relative;
     }
-
     .message {
-      font-size: 2.5rem;
+      font-size: 3rem;
       color: #d1499b;
       text-align: center;
       opacity: 0;
       animation: fadeIn 2s ease forwards;
     }
-
     .message:nth-child(2) {
       animation-delay: 2.5s;
     }
-
-    .bear {
+    .heart-frame {
+      position: relative;
+      width: 200px;
+      height: 180px;
+      background: pink;
       margin-top: 20px;
-      width: 150px;
-      height: auto;
-      opacity: 0;
       animation: fadeIn 2s ease forwards;
       animation-delay: 5s;
+      opacity: 0;
+      transition: transform 0.3s;
+      transform: rotate(-45deg);
+      clip-path: path('M 100 180 C -30 100, 0 0, 100 60 C 200 0, 230 100, 100 180 Z');
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-
+    .heart-frame:hover {
+      transform: scale(1.1) rotate(-45deg);
+    }
+    .bear {
+      width: 140px;
+      height: auto;
+      transform: rotate(45deg);
+    }
     .heart {
       position: absolute;
       width: 20px;
@@ -53,7 +62,6 @@
       transform: rotate(45deg);
       animation: floatHearts 5s linear infinite;
     }
-
     .heart::before,
     .heart::after {
       content: "";
@@ -63,44 +71,78 @@
       background: red;
       border-radius: 50%;
     }
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: -10px; top: 0; }
 
-    .heart::before {
-      top: -10px;
-      left: 0;
+    .dialog {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+      font-size: 1.8rem;
+      color: #8f1d55;
     }
-
-    .heart::after {
-      left: -10px;
-      top: 0;
+    .dialog.show {
+      display: flex;
     }
-
+    .buttons {
+      margin-top: 15px;
+      display: flex;
+      gap: 15px;
+    }
+    .btn {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: 'Pacifico', cursive;
+    }
+    .btn.haan {
+      background-color: #ff6f91;
+      color: white;
+    }
+    .btn.naa {
+      background-color: #ffc0cb;
+      color: #333;
+      position: absolute;
+    }
+    .kiss {
+      position: absolute;
+      font-size: 2rem;
+      animation: floatKiss 4s linear forwards;
+    }
     @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
+      to { opacity: 1; }
     }
-
     @keyframes floatHearts {
-      0% {
-        transform: translateY(0) rotate(45deg);
-        opacity: 1;
-      }
-
-      100% {
-        transform: translateY(-100vh) rotate(45deg);
-        opacity: 0;
-      }
+      0% { transform: translateY(0) rotate(45deg); opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(45deg); opacity: 0; }
+    }
+    @keyframes floatKiss {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
     }
   </style>
 </head>
-
 <body>
   <div class="message">I am sorry</div>
   <div class="message">I love you ❤️</div>
-  <img src="https://cdn.pixabay.com/photo/2017/01/31/20/16/teddy-2022834_1280.png" class="bear" alt="Cute Bear">
+
+  <div class="heart-frame" id="heartFrame">
+    <img src="https://pngimg.com/uploads/teddy_bear/teddy_bear_PNG107.png" class="bear" alt="Cute Bear">
+  </div>
+
+  <div class="dialog" id="dialog">
+    Tu manegi Ya Nahi?
+    <div class="buttons">
+      <button class="btn haan" onclick="showKisses()">Haan</button>
+      <button class="btn naa" id="naaBtn">Naa</button>
+    </div>
+  </div>
 
   <script>
-    // Generate floating hearts
+    // Hearts float
     const createHeart = () => {
       const heart = document.createElement('div');
       heart.className = 'heart';
@@ -108,9 +150,37 @@
       heart.style.animationDuration = `${3 + Math.random() * 2}s`;
       document.body.appendChild(heart);
       setTimeout(() => heart.remove(), 5000);
-    }
+    };
+
     setInterval(createHeart, 300);
+
+    // Show dialog on hover
+    document.getElementById('heartFrame').addEventListener('mouseover', () => {
+      document.getElementById('dialog').classList.add('show');
+      const rapidHearts = setInterval(() => createHeart(), 100);
+      setTimeout(() => clearInterval(rapidHearts), 3000);
+    });
+
+    // Naa Button movement
+    const naaBtn = document.getElementById('naaBtn');
+    naaBtn.addEventListener('mouseover', () => {
+      naaBtn.style.top = `${Math.random() * 80 + 10}%`;
+      naaBtn.style.left = `${Math.random() * 80 + 10}%`;
+    });
+
+    // Kiss animation
+    function showKisses() {
+      for (let i = 0; i < 20; i++) {
+        const kiss = document.createElement('div');
+        kiss.className = 'kiss';
+        kiss.innerText = '💋';
+        kiss.style.left = `${Math.random() * 100}vw`;
+        kiss.style.top = `${Math.random() * 100}vh`;
+        kiss.style.fontSize = `${Math.random() * 2 + 1}rem`;
+        document.body.appendChild(kiss);
+        setTimeout(() => kiss.remove(), 4000);
+      }
+    }
   </script>
 </body>
-
 </html>
