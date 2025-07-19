@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I Am Sorry, I Love You</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(to bottom right, #ffe1e1, #ffe5f9);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: 'Pacifico', cursive;
+    }
+
+    .message {
+      font-size: 2.5rem;
+      color: #d1499b;
+      text-align: center;
+      opacity: 0;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    .message:nth-child(2) {
+      animation-delay: 2.5s;
+    }
+
+    .bear {
+      margin-top: 20px;
+      width: 150px;
+      height: auto;
+      opacity: 0;
+      animation: fadeIn 2s ease forwards;
+      animation-delay: 5s;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: floatHearts 5s linear infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes floatHearts {
+      0% {
+        transform: translateY(0) rotate(45deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-100vh) rotate(45deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="message">I am sorry</div>
+  <div class="message">I love you ❤️</div>
+  <img src="https://cdn.pixabay.com/photo/2017/01/31/20/16/teddy-2022834_1280.png" class="bear" alt="Cute Bear">
+
+  <script>
+    // Generate floating hearts
+    const createHeart = () => {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = `${Math.random() * 100}vw`;
+      heart.style.animationDuration = `${3 + Math.random() * 2}s`;
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }
+    setInterval(createHeart, 300);
+  </script>
+</body>
+
+</html>
